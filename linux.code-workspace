@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"clang-format.assumeFilename": ".clang-format",
+		"files.associations": {
+			"harness.h": "c"
+		}
+	}
+}
