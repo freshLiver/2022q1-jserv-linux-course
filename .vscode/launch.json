@@ -27,7 +27,7 @@
                     "ignoreFailures": false
                 },
             ],
-            "preLaunchTask": "MakeDebug",
+            "preLaunchTask": "MakeAndDebug",
             "postDebugTask": "Clear",
             "miDebuggerPath": "/bin/gdb",
         },

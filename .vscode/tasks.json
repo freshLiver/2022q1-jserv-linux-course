@@ -3,11 +3,11 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "MakeDebug",
+			"label": "MakeAndDebug",
 			"command": "/bin/make",
 			"args": [
 				"-f",
-				"${fileDirname}/MakeDebug",
+				"${fileDirname}/makefile",
 				"${fileBasenameNoExtension}"
 			],
 			"options": {
@@ -19,7 +19,7 @@
 			"command": "/bin/make",
 			"args": [
 				"-f",
-				"${fileDirname}/MakeDebug",
+				"${fileDirname}/makefile",
 				"clear"
 			],
 			"options": {
