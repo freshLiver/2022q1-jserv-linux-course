@@ -1,0 +1,3 @@
+[submodule "labs/lab0-c"]
+	path = labs/lab0-c
+	url = git@github.com:freshLiver/lab0-c.git
