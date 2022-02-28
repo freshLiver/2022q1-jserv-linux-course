@@ -1,0 +1,7 @@
+force:
+
+doubly-iter: force
+	gcc -g -Wall -fsanitize=alignment doubly-iter.c -o doubly-iter.out
+
+main: force
+	gcc -g -Wall main.c -o main.out
