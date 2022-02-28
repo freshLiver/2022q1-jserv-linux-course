@@ -36,13 +36,18 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/qtest",
-            "args": [],
+            "args": [
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
+                {
+                    "description": "Work with Valgrind",
+                    "text": "target remote | vgdb"
+                },
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
