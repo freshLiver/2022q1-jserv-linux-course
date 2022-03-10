@@ -3,4 +3,4 @@
 	url = git@github.com:freshLiver/lab0-c.git
 [submodule "labs/lab3-fibdrv"]
 	path = labs/lab3-fibdrv
-	url = git@github.com:freshLiver/fibdvr.git
+	url = git@github.com:freshLiver/fibdrv.git
