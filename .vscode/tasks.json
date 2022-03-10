@@ -7,7 +7,7 @@
 			"command": "/bin/make",
 			"args": [
 				"-f",
-				"${fileDirname}/MakeDebug",
+				"${fileDirname}/Makefile",
 				"${fileBasenameNoExtension}"
 			],
 			"options": {
@@ -19,7 +19,7 @@
 			"command": "/bin/make",
 			"args": [
 				"-f",
-				"${fileDirname}/MakeDebug",
+				"${fileDirname}/Makefile",
 				"clear"
 			],
 			"options": {
