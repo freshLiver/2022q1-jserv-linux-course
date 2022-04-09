@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "/lib/modules/5.11.0-49-generic/build/arch/x86/include",
+                "/lib/modules/5.11.0-49-generic/build/arch/x86/include/generated",
+                "/lib/modules/5.11.0-49-generic/build/include",
+                "/lib/modules/5.11.0-49-generic/build/include/generated"
+            ],
+            "defines": [
+                "MODULE",
+                "__KERNEL__"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": [
+            ]
+        }
+    ],
+    "version": 4
+}
