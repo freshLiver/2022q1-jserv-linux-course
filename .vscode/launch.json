@@ -9,7 +9,10 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}.out",
-            "args": [],
+            "args": [
+                "0",
+                "-1"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
@@ -28,7 +31,7 @@
                 },
             ],
             "preLaunchTask": "MakeAndDebug",
-            "postDebugTask": "Clear",
+            "postDebugTask": "Clean",
             "miDebuggerPath": "/bin/gdb",
         },
         {
@@ -36,8 +39,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/qtest",
-            "args": [
-            ],
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

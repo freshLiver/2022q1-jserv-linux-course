@@ -15,12 +15,12 @@
 			},
 		},
 		{
-			"label": "Clear",
+			"label": "Clean",
 			"command": "/bin/make",
 			"args": [
 				"-f",
 				"${fileDirname}/Makefile",
-				"clear"
+				"clean"
 			],
 			"options": {
 				"cwd": "${fileDirname}"
