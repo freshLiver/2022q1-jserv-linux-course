@@ -61,14 +61,14 @@ bool mt_add_vals(void)
     for (int i = 0; i < N_THREADS; i++) {
         int *offset = dma_wrap(malloc, sizeof(int));
         *offset = i;
-        if (pthread_create(&threads[i], NULL, add_vals, offset) != 0) {
+        if (pthread_create(&threads[i], NULL, add_vals, offset)) {
             printf("Failed to create thread %d\n", i);
             exit(1);
         }
     }
     // wait for work to finish
     for (int i = 0; i < N_THREADS; i++) {
-        if (pthread_join(threads[i], NULL) != 0) {
+        if (pthread_join(threads[i], NULL)) {
             printf("Failed to join thread %d\n", i);
             exit(1);
         }
@@ -94,7 +94,7 @@ static void *del_val(void *args)
 bool mt_del_vals(void)
 {
     for (int i = 0; i < N_THREADS; i++) {
-        if (pthread_create(&threads_del[i], NULL, add_val, NULL) != 0) {
+        if (pthread_create(&threads_del[i], NULL, add_val, NULL)) {
             printf("Failed to create thread %d\n", i);
             exit(1);
         }
@@ -107,7 +107,7 @@ bool mt_del_vals(void)
     mt_add_vals();
     // wait for work to finish
     for (int i = 0; i < N_THREADS * 2; i++) {
-        if (pthread_join(threads_del[i], NULL) != 0) {
+        if (pthread_join(threads_del[i], NULL)) {
             printf("Failed to join thread %d\n", i);
             exit(1);
         }
@@ -120,7 +120,7 @@ bool test_add()
     map = hashmap_new(10, cmp_uint32, hash_uint32);
 
     int loops = 0;
-    while (hashmap_put_retries == 0) {
+    while (!hashmap_put_retries) {
         loops += 1;
         if (!mt_add_vals()) {
             printf("Error. Failed to add values!\n");
@@ -162,7 +162,7 @@ bool test_del()
     /* make sure test counters are zeroed */
     hashmap_del_fail = hashmap_del_fail_new_head = 0;
 
-    while (hashmap_del_fail == 0 || hashmap_del_fail_new_head == 0) {
+    while (!hashmap_del_fail || !hashmap_del_fail_new_head) {
         map = hashmap_new(10, cmp_uint32, hash_uint32);
 
         /* multi-threaded add values */
