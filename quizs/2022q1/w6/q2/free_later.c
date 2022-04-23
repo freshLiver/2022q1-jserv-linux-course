@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "free_later.h"
 
 typedef struct list_node {
     struct list_node *next;
@@ -18,7 +19,7 @@ static const list_node_t *empty = NULL;
 
 static list_t *list_new()
 {
-    list_t *l = calloc(1, sizeof(list_node_t));
+    list_t *l = dma_wrap(calloc, 1, sizeof(list_node_t));
     l->head = (list_node_t *) empty;
     l->length = 0;
     return l;
@@ -27,7 +28,7 @@ static list_t *list_new()
 static void list_add(list_t *l, void *val)
 {
     /* wrap the value as a node in the linked list */
-    list_node_t *v = calloc(1, sizeof(list_node_t));
+    list_node_t *v = dma_wrap(calloc, 1, sizeof(list_node_t));
     v->val = val;
 
     /* try adding to the front of the list */
@@ -92,7 +93,7 @@ int free_later_init()
 /* register a var for cleanup */
 void free_later(void *var, void release(void *var))
 {
-    free_later_t *cv = malloc(sizeof(free_later_t));
+    free_later_t *cv = dma_wrap(malloc, sizeof(free_later_t));
     cv->var = var;
     cv->free = release;
     list_add(buffer, cv);

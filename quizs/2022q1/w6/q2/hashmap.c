@@ -11,7 +11,7 @@ static hashmap_kv_t *create_node_with_malloc(void *opaque,
                                              const void *key,
                                              void *value)
 {
-    hashmap_kv_t *next = malloc(sizeof *(next));
+    hashmap_kv_t *next = dma_wrap(malloc, sizeof *(next));
     next->key = key;
     next->value = value;
     return next;
@@ -29,9 +29,9 @@ void *hashmap_new(uint32_t n_buckets,
                   uint8_t cmp(const void *x, const void *y),
                   uint64_t hash(const void *key))
 {
-    hashmap_t *map = calloc(1, sizeof(hashmap_t));
+    hashmap_t *map = dma_wrap(calloc, 1, sizeof(hashmap_t));
     map->n_buckets = n_buckets;
-    map->buckets = calloc(n_buckets, sizeof(hashmap_kv_t *));
+    map->buckets = dma_wrap(calloc, n_buckets, sizeof(hashmap_kv_t *));
 
     /* keep local reference of the two utility functions */
     map->hash = hash;

@@ -24,6 +24,17 @@
 #ifndef _FREE_LATER_H_
 #define _FREE_LATER_H_
 
+#include <stdio.h>
+#define dma_wrap(dma, ...)                                            \
+    ({                                                                \
+        void *_p = dma(__VA_ARGS__);                                  \
+        if (!_p) {                                                    \
+            printf("%s failed in %s:%d\n", #dma, __func__, __LINE__); \
+            exit(1);                                                  \
+        }                                                             \
+        _p;                                                           \
+    })
+
 /* _init() must be called before use and _exit() once at the end */
 int free_later_init(void);
 int free_later_exit(void);

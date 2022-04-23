@@ -49,7 +49,7 @@ static void *add_vals(void *args)
 {
     int *offset = args;
     for (int j = 0; j < N_LOOPS; j++) {
-        int *val = malloc(sizeof(int));
+        int *val = dma_wrap(malloc, sizeof(int));
         *val = (*offset * N_LOOPS) + j;
         hashmap_put(map, val, val);
     }
@@ -59,8 +59,7 @@ static void *add_vals(void *args)
 bool mt_add_vals(void)
 {
     for (int i = 0; i < N_THREADS; i++) {
-        int *offset = malloc(sizeof(int));
-
+        int *offset = dma_wrap(malloc, sizeof(int));
         *offset = i;
         if (pthread_create(&threads[i], NULL, add_vals, offset) != 0) {
             printf("Failed to create thread %d\n", i);
