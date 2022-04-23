@@ -97,9 +97,9 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                 /* replace this link, assuming it has not changed by another
                  * thread
                  */
-                if (__atomic_compare_exchange(
-                        &prev->next, &kv, &next, false,  // TODO : KKKK
-                        __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)) {
+                if (__atomic_compare_exchange(&prev->next /* KKKK */, &kv,
+                                              &next, false, __ATOMIC_SEQ_CST,
+                                              __ATOMIC_SEQ_CST)) {
                     /* this node, key and value are never again used by this */
                     map->destroy_node(map->opaque, kv);
                     return true;
@@ -110,9 +110,8 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                  * (NULL or other links)
                  */
                 if (__atomic_compare_exchange(
-                        &map->buckets[bucket_index],  // TODO : QQQQ
-                        &kv, &next, false, __ATOMIC_SEQ_CST,
-                        __ATOMIC_SEQ_CST)) {
+                        &map->buckets[bucket_index] /* QQQQ */, &kv, &next,
+                        false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)) {
                     map->destroy_node(map->opaque, kv);
                     return true;
                 }
@@ -169,9 +168,9 @@ bool hashmap_del(hashmap_t *map, const void *key)
 
         /* previous means this not the head but a link in the list */
         if (prev) { /* try the delete but fail if another thread did delete */
-            if (__atomic_compare_exchange(
-                    &prev->next, &match, &match->next,  // TODO : ZZZZ
-                    false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)) {
+            if (__atomic_compare_exchange(&prev->next /* ZZZZ */, &match,
+                                          &match->next, false, __ATOMIC_SEQ_CST,
+                                          __ATOMIC_SEQ_CST)) {
                 __atomic_fetch_sub(&map->length, 1, __ATOMIC_SEQ_CST);
                 map->destroy_node(map->opaque, match);
                 return true;
