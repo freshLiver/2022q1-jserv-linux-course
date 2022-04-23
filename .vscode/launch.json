@@ -35,10 +35,10 @@
             "miDebuggerPath": "/bin/gdb",
         },
         {
-            "name": "qtest with debug",
+            "name": "Make and Debug with GDB",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/qtest",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -47,7 +47,7 @@
             "MIMode": "gdb",
             "setupCommands": [
                 {
-                    "description": "Work with Valgrind",
+                    "description": "Work with Valgrind (after valgrind --vgdb=yes --vgdb-error=0 target)",
                     "text": "target remote | vgdb"
                 },
                 {
@@ -56,7 +56,9 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "qtest",
+            "preLaunchTask": "MakeAndDebug",
+            "postDebugTask": "Clean",
+            "miDebuggerPath": "/bin/gdb",
         },
     ]
 }
