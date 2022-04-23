@@ -136,7 +136,7 @@ bool test_add()
             if (v && *v == i) {
                 found++;
             } else {
-                printf("Cound not find %u in the map\n", i);
+                printf("Could not find %u in the map\n", i);
             }
         }
         if (found == TOTAL) {
@@ -180,7 +180,7 @@ bool test_del()
             if (v && *v == i) {
                 found++;
             } else {
-                printf("Cound not find %u in the hashmap\n", i);
+                printf("Could not find %u in the hashmap\n", i);
             }
         }
         if (found != TOTAL) {

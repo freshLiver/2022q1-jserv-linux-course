@@ -12,7 +12,7 @@
  *
  * `free_later_init()` must be called before using `free_later`, and
  * `free_later_exit()` should be called before application termination. It'll
- * ensure all registerd vars have their `release()` callback invoked.
+ * ensure all registered vars have their `release()` callback invoked.
  *
  * `free_later_stage()` should be called before a round of work starts. It'll
  * stage all buffered values to a list that can't be updated, and make a new
