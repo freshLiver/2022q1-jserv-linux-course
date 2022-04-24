@@ -27,8 +27,10 @@
 #ifdef BENCHMARK
 #define THREAD_CONTENTION_MIN
 #define VOLATILE_BM volatile
+#define INC_ERROR_CNT(var) __atomic_fetch_add(var, 1, __ATOMIC_SEQ_CST)
 #else
 #define VOLATILE_BM
+#define INC_ERROR_CNT(var) var += 1
 #endif
 
 #include <stdio.h>

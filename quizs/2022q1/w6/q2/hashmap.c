@@ -104,12 +104,7 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                     map->destroy_node(map->opaque, kv);
                     return true;
                 }
-#ifndef THREAD_CONTENTION_MIN
-                __atomic_fetch_add(&hashmap_put_replace_fail, 1,
-                                   __ATOMIC_SEQ_CST);
-#else
-                hashmap_put_replace_fail += 1;
-#endif
+                INC_ERROR_CNT(hashmap_put_replace_fail);
             } else { /* no previous link, update the head of the list */
                 /* set the head of the list to be whatever this node points to
                  * (NULL or other links)
@@ -120,15 +115,7 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                     map->destroy_node(map->opaque, kv);
                     return true;
                 }
-
-#ifndef THREAD_CONTENTION_MIN
-                __atomic_fetch_add(&hashmap_put_head_fail, 1, __ATOMIC_SEQ_CST);
-#else
-                /* failure means at least one new entry was added, retry the
-                 * whole match/del process
-                 */
-                hashmap_put_head_fail += 1;
-#endif
+                INC_ERROR_CNT(hashmap_put_head_fail);
             }
         } else {       /* if the key does not exist, try adding it */
             if (!next) /* make the next key-value pair to append */
@@ -145,16 +132,7 @@ bool hashmap_put(hashmap_t *map, const void *key, void *value)
                 __atomic_fetch_add(&map->length, 1, __ATOMIC_SEQ_CST);
                 return false;
             }
-
-#ifndef THREAD_CONTENTION_MIN
-            __atomic_fetch_add(&hashmap_put_retries, 1, __ATOMIC_SEQ_CST);
-#else
-            /* failure means another thead updated head before this.
-             * track the CAS failure for tests -- non-atomic to minimize
-             * thread contention
-             */
-            hashmap_put_retries += 1;
-#endif
+            INC_ERROR_CNT(hashmap_put_retries);
         }
     }
 }
@@ -188,11 +166,7 @@ bool hashmap_del(hashmap_t *map, const void *key)
                 map->destroy_node(map->opaque, match);
                 return true;
             }
-#ifndef THREAD_CONTENTION_MIN
-            __atomic_fetch_add(&hashmap_del_fail, 1, __ATOMIC_SEQ_CST);
-#else
-            hashmap_del_fail += 1;
-#endif
+            INC_ERROR_CNT(hashmap_del_fail);
         } else { /* no previous link means this needs to leave empty bucket */
             /* copy the next link in the list (may be NULL) to the head */
             if (__atomic_compare_exchange(&map->buckets[bucket_index], &match,
@@ -202,13 +176,8 @@ bool hashmap_del(hashmap_t *map, const void *key)
                 map->destroy_node(map->opaque, match);
                 return true;
             }
-
             /* failure means whole match/del process needs another attempt */
-#ifndef THREAD_CONTENTION_MIN
-            __atomic_fetch_add(&hashmap_del_fail_new_head, 1, __ATOMIC_SEQ_CST);
-#else
-            hashmap_del_fail_new_head += 1;
-#endif
+            INC_ERROR_CNT(hashmap_del_fail_new_head);
         }
     }
 
