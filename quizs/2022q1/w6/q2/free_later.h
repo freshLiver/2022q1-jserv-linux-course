@@ -50,5 +50,6 @@ int free_later_exit(void);
 
 /* add a var to the cleanup later list */
 void free_later(void *var, void release(void *var));
+void free_later_run();
 
 #endif

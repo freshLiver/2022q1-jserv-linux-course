@@ -108,15 +108,18 @@ void free_later_stage(void)
     /* CAS-based lock in case multiple threads are calling this */
     acquire_lock(&lock);
 
-    if (!buffer_prev || buffer_prev->length == 0) {
-        release_lock(&lock);
-        return;
-    }
+    // empty buffer, nothing to do
+    if (!buffer)
+        goto newlist;
+    if (!buffer->length)
+        goto finish;
 
-    /* swap the buffers */
+    free_later_run();
     buffer_prev = buffer;
-    buffer = list_new();
 
+newlist:
+    buffer = list_new();
+finish:
     release_lock(&lock);
 }
 
