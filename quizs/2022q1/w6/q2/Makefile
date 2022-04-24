@@ -12,6 +12,12 @@ CFLAGS += -std=gnu11 -Wall
 LDFLAGS = -lpthread
 # LDFLAGS += -fsanitize=address
 
+VGDB = false
+VGDB_FLAGS = 
+ifeq ($(VGDB), true)
+VGDB_FLAGS += --vgdb=yes --vgdb-error=0
+endif
+
 BENCHMARK = false
 DEFINE_FLAGS = 
 ifeq ($(BENCHMARK), true)
@@ -41,5 +47,8 @@ check: $(TARGET)
 clean:
 	$(VECHO) "  Cleaning...\n"
 	$(Q)$(RM) $(TARGET) $(OBJS) $(deps)
+
+valgrind: all
+	valgrind $(VGDB_FLAGS) --leak-check=full --show-leak-kinds=all ./test-hashmap
 
 -include $(deps)
