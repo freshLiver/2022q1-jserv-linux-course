@@ -44,7 +44,15 @@ static uint64_t hash_uint32(const void *key)
     return *(uint32_t *) key;
 }
 
-/* Simulates work that is quick and uses the hashtable once per loop */
+/**
+ * @brief Simulates work that is quick and uses the hashtable once per loop
+ *
+ * Each thread will put N_LOOPS key value pairs (val,val) into hash table, where
+ * val's range is [*offset * N_LOOPS, *offset * N_LOOPS + N_LOOPS).
+ *
+ * @param args offset
+ * @return void* always NULL
+ */
 static void *add_vals(void *args)
 {
     int *offset = args;
@@ -57,6 +65,11 @@ static void *add_vals(void *args)
     return NULL;
 }
 
+/**
+ * @brief Create N_THREADS threads and do add_vals(i) on each thread
+ *
+ * @return true if no error happened, false if failed to create or join threads
+ */
 bool mt_add_vals(void)
 {
     for (int i = 0; i < N_THREADS; i++) {
@@ -103,7 +116,7 @@ bool mt_del_vals(void)
             exit(1);
         }
         if (pthread_create(&threads_del[N_THREADS + i], NULL, del_val, NULL)) {
-            printf("Failed to create thread %d\n", i);
+            printf("Failed to create thread %d\n", N_THREADS + i);
             exit(1);
         }
     }
@@ -190,6 +203,11 @@ bool test_del()
         if (found != TOTAL) {
             printf("test_del() is failing. Not all values found!?");
             return false;
+        } else {
+            printf(
+                "Loop %d. All values found. hashmap_del_fail=%u, "
+                "hashmap_del_fail_new_head=%u\n",
+                loops, hashmap_del_fail, hashmap_del_fail_new_head);
         }
     }
     printf("Done. Needed %u loops\n", loops);
