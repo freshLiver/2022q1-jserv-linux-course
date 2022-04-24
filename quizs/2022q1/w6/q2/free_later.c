@@ -135,10 +135,16 @@ void free_later_run()
     /* At this point, all workers have processed one or more new flow since the
      * free_later buffer was filled. No threads are using the old, deleted data.
      */
-    for (list_node_t *n = buffer_prev->head; n; n = n->next) {
-        free_later_t *v = n->val;
-        v->free(v->var);
-        free(n);
+    for (list_node_t *node = buffer_prev->head, *next; node; node = next) {
+        // keep next node's address
+        next = node->next;
+
+        // free node
+        free_later_t *var = node->val;
+        if (var->free)
+            var->free(var->var);
+        free(var);
+        free(node);
     }
 
     free(buffer_prev);
