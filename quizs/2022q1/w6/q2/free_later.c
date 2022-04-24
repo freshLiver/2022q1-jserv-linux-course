@@ -14,7 +14,7 @@ typedef struct {
     uint32_t length;
 } list_t;
 
-static volatile uint32_t list_retries_empty = 0, list_retries_populated = 0;
+static VOLATILE_BM uint32_t list_retries_empty = 0, list_retries_populated = 0;
 static const list_node_t *empty = NULL;
 
 static list_t *list_new()
@@ -41,7 +41,13 @@ static void list_add(list_t *l, void *val)
                 __atomic_fetch_add(&l->length, 1, __ATOMIC_SEQ_CST);
                 return;
             }
+
+#ifndef THREAD_CONTENTION_MIN
+            __atomic_fetch_add(&list_retries_empty, 1, __ATOMIC_SEQ_CST);
+#else
             list_retries_empty++;
+#endif
+
         } else { /* inserting when an existing link is present */
             v->next = n;
             if (__atomic_compare_exchange(&l->head, &n, &v, false,
@@ -49,7 +55,12 @@ static void list_add(list_t *l, void *val)
                 __atomic_fetch_add(&l->length, 1, __ATOMIC_SEQ_CST);
                 return;
             }
+
+#ifndef THREAD_CONTENTION_MIN
+            __atomic_fetch_add(&list_retries_populated, 1, __ATOMIC_SEQ_CST);
+#else
             list_retries_populated++;
+#endif
         }
     }
 }

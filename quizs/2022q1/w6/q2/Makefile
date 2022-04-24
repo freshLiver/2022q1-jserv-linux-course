@@ -12,11 +12,17 @@ CFLAGS += -std=gnu11 -Wall
 LDFLAGS = -lpthread
 # LDFLAGS += -fsanitize=address
 
+BENCHMARK = false
+DEFINE_FLAGS = 
+ifeq ($(BENCHMARK), true)
+DEFINE_FLAGS += -DBENCHMARK
+endif
+
 # standard build rules
 .SUFFIXES: .o .c
 .c.o:
 	$(VECHO) "  CC\t$@\n"
-	$(Q)$(CC) -o $@ $(CFLAGS) -c -MMD -MF $@.d $<
+	$(Q)$(CC) $(DEFINE_FLAGS) -o $@ $(CFLAGS) -c -MMD -MF $@.d $<
 
 OBJS = \
 	free_later.o \

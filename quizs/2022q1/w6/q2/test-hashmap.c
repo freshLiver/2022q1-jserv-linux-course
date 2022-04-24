@@ -25,9 +25,9 @@ static pthread_t threads_del[N_THREADS * 2];
 
 static uint32_t MAX_VAL_PLUS_ONE = N_THREADS * N_LOOPS + 1;
 
-extern volatile uint32_t hashmap_del_fail, hashmap_del_fail_new_head;
-extern volatile uint32_t hashmap_put_retries, hashmap_put_replace_fail;
-extern volatile uint32_t hashmap_put_head_fail;
+extern VOLATILE_BM uint32_t hashmap_del_fail, hashmap_del_fail_new_head;
+extern VOLATILE_BM uint32_t hashmap_put_retries, hashmap_put_replace_fail;
+extern VOLATILE_BM uint32_t hashmap_put_head_fail;
 
 static uint8_t cmp_uint32(const void *x, const void *y)
 {

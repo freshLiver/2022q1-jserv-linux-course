@@ -24,6 +24,13 @@
 #ifndef _FREE_LATER_H_
 #define _FREE_LATER_H_
 
+#ifdef BENCHMARK
+#define THREAD_CONTENTION_MIN
+#define VOLATILE_BM volatile
+#else
+#define VOLATILE_BM
+#endif
+
 #include <stdio.h>
 #define dma_wrap(dma, ...)                                            \
     ({                                                                \
