@@ -53,6 +53,7 @@ static void *add_vals(void *args)
         *val = (*offset * N_LOOPS) + j;
         hashmap_put(map, val, val);
     }
+    free(args);
     return NULL;
 }
 
@@ -163,7 +164,8 @@ bool test_del()
     hashmap_del_fail = hashmap_del_fail_new_head = 0;
 
     while (!hashmap_del_fail || !hashmap_del_fail_new_head) {
-        map = hashmap_new(10, cmp_uint32, hash_uint32);
+        if (!map)
+            map = hashmap_new(10, cmp_uint32, hash_uint32);
 
         /* multi-threaded add values */
         if (!mt_del_vals()) {
