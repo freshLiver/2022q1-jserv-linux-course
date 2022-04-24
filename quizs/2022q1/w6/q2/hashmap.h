@@ -40,6 +40,10 @@ void *hashmap_new(uint32_t hint,
                   uint8_t cmp(const void *x, const void *y),
                   uint64_t hash(const void *key));
 
+
+/* free all buckets and map itself */
+void hashmap_free_later(hashmap_t *map);
+
 /* Return a value mapped to key or NULL, if no entry exists for the given */
 void *hashmap_get(hashmap_t *map, const void *key);
 

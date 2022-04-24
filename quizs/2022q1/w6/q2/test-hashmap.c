@@ -203,7 +203,7 @@ int main()
         printf("Failed to run multi-threaded deletion test.");
         return 2;
     }
-
+    hashmap_free_later(map);
     free_later_exit();
     return 0;
 }

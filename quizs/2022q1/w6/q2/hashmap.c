@@ -44,6 +44,17 @@ void *hashmap_new(uint32_t n_buckets,
     return map;
 }
 
+void hashmap_free_later(hashmap_t *map)
+{
+    // traverse each bucket and free their list later
+    for (int i = 0; i < map->n_buckets; ++i)
+        for (hashmap_kv_t *node = map->buckets[i]; node; node = node->next)
+            map->destroy_node(map->opaque, node);
+
+    free_later(map->buckets, free);
+    free_later(map, free);
+}
+
 void *hashmap_get(hashmap_t *map, const void *key)
 {
     /* hash to convert key to a bucket index where value would be stored */
