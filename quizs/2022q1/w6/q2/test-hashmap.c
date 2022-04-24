@@ -80,8 +80,11 @@ bool mt_add_vals(void)
 /* add a value over and over to test the del functionality */
 void *add_val(void *args)
 {
-    for (int j = 0; j < N_LOOPS; j++)
-        hashmap_put(map, &MAX_VAL_PLUS_ONE, &MAX_VAL_PLUS_ONE);
+    for (int j = 0; j < N_LOOPS; j++) {
+        uint32_t *val = dma_wrap(malloc, sizeof(MAX_VAL_PLUS_ONE));
+        *val = MAX_VAL_PLUS_ONE;
+        hashmap_put(map, val, val);
+    }
     return NULL;
 }
 
